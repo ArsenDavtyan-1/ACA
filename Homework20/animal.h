@@ -12,6 +12,8 @@ public:
 	Animal() : m_weight(15), m_name("Js"), m_color("white"), m_price(100)
 	{}
 	Animal(int, int, std::string, std::string);
+	virtual ~Ainmal()
+	{}
 	virtual void voice();
 	void print();
 };
