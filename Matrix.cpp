@@ -8,13 +8,17 @@ private:
 	int column;
 public:
 	Matrix(int row_lenght, int column_lenght); // constructor
-	Matrix(const Matrix& obj);      // copy constructo
+	Matrix(const Matrix& obj);      // copy constructor
 	~Matrix();  // destructor
 	void fill();
 	void print();
 	void rotate();
 	Matrix& operator=(const Matrix& obj); // assignment operator
 	Matrix operator+(const Matrix& obj); // addition operator
+	Matrix(Matrix&& obj); // move constructor
+	Matrix& operator=(Matrix&& obj); //move assignment operator
+	Matrix& operator++();
+	Matrix operator++(int);
 };
 
 int main()
@@ -28,24 +32,19 @@ int main()
 	A.fill();
 	A.print();
 	std::cout << std::endl << std::endl;
-	std::cout << "rows_2 = ";
+	std::cout << "rows 2 = ";
 	std::cin >> row;
-	std::cout << "columns_2 = ";
+	std::cout << "columns 2 = ";
 	std::cin >> column;
-	//A.rotate();
-	//A.print();
 	Matrix B(row, column);
 	B.fill();
-	Matrix C = A + B;
-	std::cout << std::endl << std::endl << "printing B " << std::endl;
 	B.print();
-	std::cout << std::endl << std::endl << "printing C " << std::endl;
-	C.print();
-	Matrix D(3, 1);
-	D = A + C;
-	std::cout << "printing D " << std::endl;
-	D.print();
 	std::cout << std::endl << std::endl;
+	Matrix C(A + B);
+	C.print();
+	std::cout << std::endl << std::endl;
+	C++;
+	C.print();
 }
 
 Matrix::Matrix(int row_lenght, int column_lenght)
@@ -166,6 +165,53 @@ Matrix Matrix::operator+(const Matrix& obj)
 		}
 	}
 	return new_obj;
+}
+
+Matrix::Matrix(Matrix&& obj)
+{
+	std::cout << "Move constructor called" << std::endl;
+	mat = obj.mat;
+	row = obj.row;
+	column = obj.column;
+	obj.row = 0;
+	obj.column = 0;
+	obj.mat = nullptr;
+}
+
+Matrix& Matrix::operator=(Matrix&& obj)
+{
+	std::cout << "move operator= called" << std::endl;
+	if (this == &obj)
+		return *this;
+	for (int i = 0; i < row; i++)
+		delete[] mat[i];
+	delete[] mat;
+	row = obj.row;
+	column = obj.column;
+	mat = new int*[row];
+	for (int i = 0; i < row; i++)
+		mat[i] = new int[column];
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < column; j++)
+			mat[i][j] = obj.mat[i][j];
+	return *this;
+}
+
+Matrix& Matrix::operator++()
+{
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < column; j++)
+			mat[i][j] += 3;
+	return *this;
+}
+
+Matrix Matrix::operator++(int)
+{
+	Matrix temp(*this);
+	for (int i = 0; i < row; i++)
+		for (int j = 0; j < column; j++)
+			this->mat[i][j] += 3;
+	return temp;
 }
 
 Matrix::~Matrix()
