@@ -1,15 +1,21 @@
 #include "Matrix.h"
 
+template class Matrix<int>;
+template class Matrix<double>;
+template void MatrixMultiplyFile<int>(std::string, std::string, std::string);
+template void MatrixMultiplyFile<double>(std::string, std::string, std::string);
 
-Matrix::Matrix(int row_lenght, int column_lenght)
+
+template <typename T>
+Matrix<T>::Matrix(int row_lenght, int column_lenght)
 {
 	//std::cout << "Called constructor" << std::endl;
 	row = row_lenght;
 	column = column_lenght;
-	mat = new int* [row];
+	mat = new T* [row];
 	for (int i = 0; i < row; i++)
 	{
-		mat[i] = new int[column];
+		mat[i] = new T[column];
 	}
 
 	for (int i = 0; i < row; ++i)
@@ -21,7 +27,8 @@ Matrix::Matrix(int row_lenght, int column_lenght)
 	}
 }
 
-Matrix::Matrix(std::string txtFile)
+template <typename T>
+Matrix<T>::Matrix(std::string txtFile)
 {
 	std::ifstream inputFile;
 	
@@ -54,10 +61,10 @@ Matrix::Matrix(std::string txtFile)
 		return;
 	}
 	
-	mat = new int* [row];
+	mat = new T* [row];
 	for (int i = 0; i < row; i++)
 	{
-		mat[i] = new int[column];
+		mat[i] = new T[column];
 	}
 
 	for(int i = 0; i < row; ++i)
@@ -66,12 +73,12 @@ Matrix::Matrix(std::string txtFile)
 		{
 			(std::getline(inputFile, line, '\t'));
 			if (line[0] != '\n') {
-				mat[i][j] = intMaker(line);
+				mat[i][j] = doubleMaker(line);
 				//std::cout << line << " - " << intMaker(line) << "|";
 			}
 			else {
 				line.erase(0, 1);
-				mat[i][j] = intMaker(line);
+				mat[i][j] = doubleMaker(line);
 				//std::cout << line << " - " << intMaker(line) << "|";
 			}
 		}
@@ -80,35 +87,38 @@ Matrix::Matrix(std::string txtFile)
 	inputFile.close();
 }
 
-Matrix::Matrix(const Matrix& obj)
+template <typename T>
+Matrix<T>::Matrix(const Matrix<T>& obj)
 {
 	//std::cout << "Called copy constructor" << std::endl;
 
 	row = obj.row;
 	column = obj.column;
 
-	mat = new int* [row];
+	mat = new T* [row];
 	for (int i = 0; i < row; i++)
-		mat[i] = new int[column];
+		mat[i] = new T[column];
 
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < column; j++)
 			mat[i][j] = obj.mat[i][j];
 }
 
-void Matrix::fill()
+template <typename T>
+void Matrix<T>::fill()
 {
 	//std::cout << "Called fill member function" << std::endl;
 	for (int i = 0; i < row; i++)
 	{
 		for (int j = 0; j < column; j++)
 		{
-			mat[i][j] = rand() % 100;
+			mat[i][j] = (rand() % 1000) / T(56);
 		}
 	}
 }
 
-void Matrix::print() const
+template <typename T>
+void Matrix<T>::print() const
 {
 	//std::cout << "Called print member function" << std::endl;
 	for (int i = 0; i < row; i++)
@@ -121,14 +131,15 @@ void Matrix::print() const
 	}
 }
 
-void Matrix::rotate()
+template <typename T>
+void Matrix<T>::rotate()
 {
 	//std::cout << "Called rotate member function" << std::endl;
-	int** mat_2;
-	mat_2 = new int* [column];
+	T** mat_2;
+	mat_2 = new T* [column];
 	for (int i = 0; i < column; i++)
 	{
-		mat_2[i] = new int[row];
+		mat_2[i] = new T[row];
 	}
 	for (int i = 0; i < row; i++)
 	{
@@ -148,7 +159,9 @@ void Matrix::rotate()
 	column = temp;
 }
 
-Matrix& Matrix::operator=(const Matrix& obj)
+
+template <typename T>
+Matrix<T>& Matrix<T>::operator=(const Matrix<T>& obj)
 {
 	//std::cout << "Called assignment operator" << std::endl;
 	if (this != &obj) {
@@ -159,9 +172,9 @@ Matrix& Matrix::operator=(const Matrix& obj)
 		row = obj.row;
 		column = obj.column;
 
-		mat = new int* [row];
+		mat = new T* [row];
 		for (int i = 0; i < row; i++)
-			mat[i] = new int[column];
+			mat[i] = new T[column];
 
 		for (int i = 0; i < row; i++)
 			for (int j = 0; j < column; j++)
@@ -170,14 +183,15 @@ Matrix& Matrix::operator=(const Matrix& obj)
 	return *this;
 }
 
-Matrix Matrix::operator+(const Matrix& obj)
+template <typename T>
+Matrix<T> Matrix<T>::operator+(const Matrix<T>& obj)
 {
 	if (row != obj.row || column != obj.column)
 	{
 		std::cout << "The sizes are incompatible,we can not add them" << std::endl;
-		return Matrix(0, 0);
+		return Matrix<T>(0, 0);
 	}
-	Matrix new_obj(row, column);
+	Matrix<T> new_obj(row, column);
 	for (int i = 0; i < row; i++)
 	{
 		for (int j = 0; j < column; j++)
@@ -188,7 +202,8 @@ Matrix Matrix::operator+(const Matrix& obj)
 	return new_obj;
 }
 
-Matrix::Matrix(Matrix&& obj) noexcept
+template <typename T>
+Matrix<T>::Matrix(Matrix<T>&& obj) noexcept
 {
 	//std::cout << "Move constructor called" << std::endl;
 	mat = obj.mat;
@@ -199,7 +214,8 @@ Matrix::Matrix(Matrix&& obj) noexcept
 	obj.mat = nullptr;
 }
 
-Matrix& Matrix::operator=(Matrix&& obj) noexcept
+template <typename T>
+Matrix<T>& Matrix<T>::operator=(Matrix<T>&& obj) noexcept
 {
 	//std::cout << "move operator= called" << std::endl;
 	if (this == &obj)
@@ -209,16 +225,17 @@ Matrix& Matrix::operator=(Matrix&& obj) noexcept
 	delete[] mat;
 	row = obj.row;
 	column = obj.column;
-	mat = new int*[row];
+	mat = new T*[row];
 	for (int i = 0; i < row; i++)
-		mat[i] = new int[column];
+		mat[i] = new T[column];
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < column; j++)
 			mat[i][j] = obj.mat[i][j];
 	return *this;
 }
 
-Matrix& Matrix::operator++()
+template <typename T>
+Matrix<T>& Matrix<T>::operator++()
 {
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < column; j++)
@@ -226,16 +243,18 @@ Matrix& Matrix::operator++()
 	return *this;
 }
 
-Matrix Matrix::operator++(int)
+template <typename T>
+Matrix<T> Matrix<T>::operator++(int)
 {
-	Matrix temp(*this);
+	Matrix<T> temp(*this);
 	for (int i = 0; i < row; i++)
 		for (int j = 0; j < column; j++)
 			this->mat[i][j] += 3;
 	return temp;
 }
 
-Matrix::~Matrix()
+template <typename T>
+Matrix<T>::~Matrix<T>()
 {
 	//std::cout << "Called destructor" << std::endl;
 	for (int i = 0; i < row; i++)
@@ -245,7 +264,8 @@ Matrix::~Matrix()
 	delete[] mat;
 }
 
-void Matrix::MatrixToFile(std::string fileName) const
+template <typename T>
+void Matrix<T>::MatrixToFile(std::string fileName) const
 {
 	std::ofstream outputFile(fileName + ".txt");
 
@@ -265,7 +285,8 @@ void Matrix::MatrixToFile(std::string fileName) const
 	return;
 }
 
-Matrix Matrix::operator*(const Matrix& obj) const
+template <typename T>
+Matrix<T> Matrix<T>::operator*(const Matrix<T>& obj) const
 {
 	if (column != obj.row)
 	{
@@ -286,7 +307,7 @@ Matrix Matrix::operator*(const Matrix& obj) const
 	return new_obj;
 }
 
-int intMaker(std::string str)
+/*int intMaker(std::string str)
 {
 	int a = 0;
 	int b;
@@ -297,14 +318,40 @@ int intMaker(std::string str)
 	}
 
 	return a;
+}*/
+
+double doubleMaker(std::string str)
+{
+	double a = 0;
+	double b;
+	double afterComma = 0;
+	double x = 1;
+	int i = 0;
+	while (str[i] != '.' && i < str.size())
+	{
+		b = str[i] - '0';
+		a = a * 10 + b;
+
+		++i;
+	}
+	++i;
+	for (; i < str.size(); ++i)
+	{
+		b = str[i] - '0';
+		afterComma = afterComma * 10 + b;
+		x *= 10;
+	}
+
+	a = a + (afterComma / x);
+	return a;
 }
 
 
-
+template<typename T>
 void MatrixMultiplyFile(std::string fileName1, std::string fileName2, std::string destinationFile)
 {
-	Matrix A(fileName1);
-	Matrix B(fileName2);
-	Matrix C = A * B;
+	Matrix<T> A(fileName1);
+	Matrix<T> B(fileName2);
+	Matrix<T> C = A * B;
 	C.MatrixToFile(destinationFile);
 }
