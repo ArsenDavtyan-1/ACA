@@ -136,32 +136,32 @@ my::List<T>::~List()
 }
 
 
-template <typename T>
-void my::List<T>::reverse()
-{
-	std::stack<T> st;
-	while (head != nullptr)
-	{
-		st.push(head -> m_value);
-		Node<T>* temp = head;
-		head = head->m_next;
-		delete temp;
-	}
-	
-	if (!st.empty())
-	{
-		head = new Node<T>(st.top());
-		st.pop();
-		Node<T>* temp = head;
-		while (!st.empty())
-		{
-			temp -> m_next = new Node<T>(st.top());
-			temp = temp -> m_next;
-			st.pop();
-		}
-		temp -> m_next = nullptr;
-	}
-}
+//template <typename T>
+//void my::List<T>::reverse()
+//{
+//	std::stack<T> st;
+//	while (head != nullptr)
+//	{
+//		st.push(head -> m_value);
+//		Node<T>* temp = head;
+//		head = head->m_next;
+//		delete temp;
+//	}
+//	
+//	if (!st.empty())
+//	{
+//		head = new Node<T>(st.top());
+//		st.pop();
+//		Node<T>* temp = head;
+//		while (!st.empty())
+//		{
+//			temp -> m_next = new Node<T>(st.top());
+//			temp = temp -> m_next;
+//			st.pop();
+//		}
+//		temp -> m_next = nullptr;
+//	}
+//}
 
 template <typename T>
 void my::List<T>::last_Nth(int position)
@@ -191,6 +191,28 @@ void my::List<T>::last_Nth(int position)
 		temp2 = temp2->m_next;
 	}
 	std::cout << "The " << position <<"-th element from the last is - " << temp2->m_value << std::endl;
+}
+
+
+template <typename T>
+void my::List<T>::reverse()
+{
+	if (head == nullptr || head->m_next == nullptr)
+		return;
+	Node<T>* temp1 = head->m_next->m_next;
+	Node<T>* temp2 = head->m_next;
+	head->m_next = nullptr;
+	temp2->m_next = head;
+	while (temp1 != nullptr)
+	{
+		head = temp2;
+		temp2 = temp1;
+		temp1 = temp1->m_next;
+		temp2->m_next = head;
+	}
+	temp2->m_next = head;
+	head = temp2;
+
 }
 
 //template <typename A>

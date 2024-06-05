@@ -65,4 +65,7 @@ int main()
 	L.last_Nth(22);
 	L.last_Nth(12);
 	L.last_Nth(13);
+	L.print();
+	L.reverse();
+	L.print();
 }
