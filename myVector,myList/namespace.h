@@ -2,8 +2,17 @@
 #define NAMESPACE_H_
 
 
+
 namespace my
 {
+	//template <typename T>
+	//class List;
+
+	//template <typename A>
+	//bool is_cycle(List<A>& list);
+
+
+
 	template <typename T>
 	class vector
 	{
@@ -62,6 +71,11 @@ namespace my
 		void pop_front();
 		void print();
 		void insert(T value, int position);
+		void reverse();
+		void last_Nth(int position);
+		//template <typename A> 
+		//friend bool is_cycle(List<A>& list);
+		//friend makingListReverse(List<T>&);
 		~List();
 	};
 

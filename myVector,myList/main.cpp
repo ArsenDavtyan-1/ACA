@@ -1,4 +1,5 @@
 #include <iostream>
+#include "namespace.h"
 #include "myList.h"
 #include "myvector.h"
 #include <initializer_list>
@@ -43,5 +44,24 @@ int main()
 	L.insert(11, 3);
 	L.insert(1, 5);
 	L.insert(-7, 4);
+	L.push_front(88);
+	L.push_front(-6);
+	L.push_front(-744);
+	L.push_front(171);
+	L.push_front(501);
 	L.print();
+
+	L.reverse();
+	L.print();
+	L.last_Nth(5);
+	L.push_front(-54);
+	L.push_front(881);
+	L.push_front(3);
+	L.print();
+	L.last_Nth(5);
+	L.last_Nth(0);
+	L.last_Nth(11);
+	L.last_Nth(22);
+	L.last_Nth(12);
+	L.last_Nth(13);
 }
