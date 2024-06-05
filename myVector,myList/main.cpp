@@ -1,5 +1,4 @@
 #include <iostream>
-#include "namespace.h"
 #include "myList.h"
 #include "myvector.h"
 #include <initializer_list>
@@ -33,7 +32,9 @@ int main()
 
 	//my::vector<int> C = { 4,0,5,-9,2,-99,45,12,84,54,12,5,4,7,-55,9,-9,1,54,0,3,55,8 };
 
-
+	my::vector<int> A;
+	A.push_back(7);
+	A.print();
 	my::List<int> L;
 	L.push_front(66);
 	L.push_front(-7);

@@ -1,7 +1,53 @@
 #ifndef MY_LIST_H
 #define MY_LIST_H
 #include <stack>
-#include "namespace.h"
+//#include "namespace.h"
+
+namespace my
+{
+	template <typename T>
+	class Node
+	{
+	public:
+		T m_value;
+		Node* m_next;
+		Node()
+		{
+			m_next = nullptr;
+		}
+		Node(T value) : m_value(value), m_next(nullptr)
+		{}
+
+		~Node()
+		{
+			m_next = nullptr;
+		}
+	};
+
+	template <typename T>
+	class List
+	{
+
+	private:
+		Node<T>* head;
+
+
+	public:
+		List();
+		List(T value);
+		void push_front(T value);
+		void pop_front();
+		void print();
+		void insert(T value, int position);
+		void reverse();
+		void last_Nth(int position);
+		//template <typename A> 
+		//friend bool is_cycle(List<A>& list);
+		//friend makingListReverse(List<T>&);
+		~List();
+	};
+}
+
 
 template <typename T>
 my::List<T>::List()

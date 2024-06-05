@@ -1,7 +1,35 @@
 #ifndef MY_VECTOR_H
 #define MY_VECTOR_H
 
-#include "namespace.h"
+//#include "namespace.h"
+
+
+namespace my
+{
+	template <typename T>
+	class vector
+	{
+	private:
+		int m_size;
+		int m_cap;
+		T* m_ptr;
+	public:
+		vector();
+		vector(std::initializer_list<T> init);
+		int getSize();
+		int getCapacity();
+		void push_back(T);
+		void pop_back();
+		void push_front(T);
+		void pop_front();
+		void insert(T value, int position);
+		bool is_empty();
+		void print();
+		~vector();
+		T operator[](int);
+
+	};
+}
 
 
 template <typename T>
