@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Algorithms.h"
-
+#include "Quicksort.h"
 
 
 
@@ -34,7 +34,23 @@ int main()
 	std::cout << std::endl;
 	std::cout << std::endl;
 
-	BubbleSort(brray, 25);
+	Quicksort(brray,0, 24);
 	for (int& elem : brray)
+		std::cout << elem << ' ';
+
+	int crray[25];
+	for (int i = 0;i < 25; ++i)
+	{
+		if(i % 3 == 0) 
+			crray[i] = (rand() % 1000) * (-1);
+		else
+			crray[i] = rand() % 1000;
+
+	}
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	Quicksort(crray, 0, 24);
+	for (int& elem : crray)
 		std::cout << elem << ' ';
 }
