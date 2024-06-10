@@ -1,51 +1,116 @@
 #ifndef MY_LIST_H
 #define MY_LIST_H
-#include <stack>
-//#include "namespace.h"
+//#include <stack>
+
+
 
 namespace my
 {
-	template <typename T>
-	class Node
+	template <class List>
+	class ListInputIterator
 	{
 	public:
-		T m_value;
-		Node* m_next;
-		Node()
-		{
-			m_next = nullptr;
-		}
-		Node(T value) : m_value(value), m_next(nullptr)
-		{}
+		using NodePtr  = typename List::Node;
+		using DataType = typename List::ValueType;
 
-		~Node()
+		ListInputIterator(NodePtr* ptr) : m_ptr(ptr) {}
+
+		DataType& operator*()
 		{
-			m_next = nullptr;
+			return m_ptr->m_value;
 		}
+
+		ListInputIterator& operator++()
+		{
+			m_ptr = m_ptr->m_next;
+			return *this;
+		}
+
+		ListInputIterator& operator++(int)
+		{
+			ListInputIterator temp = *this;
+			m_ptr = m_ptr->m_next;
+			return temp;
+		}
+
+		bool operator==(const ListInputIterator& obj)
+		{
+			return (m_ptr == obj.m_ptr);
+		}
+
+		bool operator!=(const ListInputIterator& obj)
+		{
+			return !(m_ptr == obj.m_ptr);
+		}
+
+	private:
+		NodePtr* m_ptr;
+
 	};
+
 
 	template <typename T>
 	class List
 	{
+	public:
+		class Node;
+		
+		using Iterator = typename ListInputIterator<List<T>>;
 
 	private:
-		Node<T>* head;
-
+		Node* head;
+	
 
 	public:
+		using ValueType = T;
+
 		List();
 		List(T value);
+		List(const List&);
+		List& operator=(const List&);
+		Iterator begin()
+		{
+			return Iterator(head);
+		}
+		Iterator end()
+		{
+			return Iterator(nullptr);
+		}
 		void push_front(T value);
 		void pop_front();
 		void print();
 		void insert(T value, int position);
 		void reverse();
 		void last_Nth(int position);
+		
+
 		//template <typename A> 
 		//friend bool is_cycle(List<A>& list);
 		//friend makingListReverse(List<T>&);
 		~List();
+
+
+		class Node
+		{
+		public:
+			T m_value;
+			Node* m_next;
+			Node()
+			{
+				m_next = nullptr;
+			}
+			Node(T value) : m_value(value), m_next(nullptr)
+			{}
+			~Node()
+			{
+				m_next = nullptr;
+			}
+		};
 	};
+
+
+
+
 }
 
 
@@ -61,10 +126,78 @@ my::List<T>::List(T value)
 	head = new Node(value);
 }
 
+
+template <typename T>
+my::List<T>::List(const List& obj)
+{
+	std::cout << "Called single linked list's copy constructor" << std::endl;
+
+	if (obj.head == nullptr)
+	{
+		head = nullptr;
+		return;
+	}
+
+	head = new Node(obj.head->m_value);
+	head->m_next = nullptr;
+	Node* ptr = head;
+	Node* obj_ptr = obj.head->m_next;
+
+
+	while (obj_ptr != nullptr)
+	{
+		ptr->m_next = new Node(obj_ptr->m_value);
+		ptr = ptr->m_next;	
+		
+		obj_ptr = obj_ptr->m_next;
+	}
+	ptr->m_next = nullptr;
+}
+
+
+template <typename T>
+my::List<T>& my::List<T>::operator=(const List<T>& obj)
+{
+	std::cout << "Called single linked list's operator=" << std::endl;
+
+	if (this == &obj)
+		return *this;
+
+	Node* temp;
+	while (head != nullptr)
+	{
+		temp = head;
+		head = head->m_next;
+		delete temp;
+	}
+	head = nullptr;
+
+	if (obj.head == nullptr)
+		return *this;
+
+	head = new Node(obj.head->m_value);
+	head->m_next = nullptr;
+	Node* ptr = head;
+	Node* obj_ptr = obj.head->m_next;
+
+
+	while (obj_ptr != nullptr)
+	{
+		ptr->m_next = new Node(obj_ptr->m_value);
+		ptr = ptr->m_next;
+
+		obj_ptr = obj_ptr->m_next;
+	}
+	ptr->m_next = nullptr;
+	
+	return *this;
+}
+
+
 template <typename T>
 void my::List<T>::push_front(T value)
 {
-	Node<T>* temp = new Node<T>(value);
+	Node* temp = new Node(value);
 	temp->m_next = head;
 	head = temp;
 }
@@ -77,7 +210,7 @@ void my::List<T>::pop_front()
 		std::cout << "The list are empty, there are nothing to pop" << std::endl;
 		return;
 	}
-	Node<T>* temp = head;
+	Node* temp = head;
 	head = head->m_next;
 	delete temp;
 }
@@ -90,7 +223,7 @@ void my::List<T>::print()
 		std::cout << "The list are empty" << std::endl;
 		return;
 	}
-	Node<T>* temp = head;
+	Node* temp = head;
 	while (temp != nullptr)
 	{
 		std::cout << temp->m_value << ' ';
@@ -107,7 +240,7 @@ void my::List<T>::insert(T value, int position)
 		std::cout << "Invalid position" << std::endl;
 		return;
 	}
-	Node<T>* temp = head;
+	Node* temp = head;
 	for (int i = 0; i < position - 1; ++i)
 	{
 		temp = temp->m_next;
@@ -117,7 +250,7 @@ void my::List<T>::insert(T value, int position)
 			return;
 		}
 	}
-	Node<T>* obj = new Node<T>(value);
+	Node* obj = new Node(value);
 	obj->m_next = temp->m_next;
 	temp->m_next = obj;
 	return;
@@ -126,7 +259,7 @@ void my::List<T>::insert(T value, int position)
 template <typename T>
 my::List<T>::~List()
 {
-	Node<T>* temp;
+	Node* temp;
 	while (head != nullptr)
 	{
 		temp = head;
@@ -172,8 +305,8 @@ void my::List<T>::last_Nth(int position)
 		return;
 	}
 	int i = 0;
-	Node<T>* temp1 = head;
-	Node<T>* temp2 = head;
+	Node* temp1 = head;
+	Node* temp2 = head;
 	while (i < position && temp1 != nullptr)
 	{
 		temp1 = temp1->m_next;
@@ -199,8 +332,8 @@ void my::List<T>::reverse()
 {
 	if (head == nullptr || head->m_next == nullptr)
 		return;
-	Node<T>* temp1 = head->m_next->m_next;
-	Node<T>* temp2 = head->m_next;
+	Node* temp1 = head->m_next->m_next;
+	Node* temp2 = head->m_next;
 	head->m_next = nullptr;
 	temp2->m_next = head;
 	while (temp1 != nullptr)
@@ -229,6 +362,18 @@ void my::List<T>::reverse()
 //
 //	return !(temp == nullptr);
 //}
+
+
+
+
+/*template <class T>              // works only when I specified the special type
+void PrintForwardList(my::List<T> list)
+{
+	for ( my::List<T>::Iterator i = list.begin(); i != list.end(); ++i)
+		std::cout << (*i) << "   ";
+	std::cout << std::endl;
+}*/
+
 
 
 
