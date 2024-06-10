@@ -3,6 +3,10 @@
 #include "myvector.h"
 #include "myDoubleList.h"
 #include <initializer_list>
+#include <vector>
+#include <list>
+
+
 
 int main()
 {
@@ -71,37 +75,83 @@ int main()
 	//L.print();
 
 
-	my::doubleList<int> D;
-	for (int i = 0; i < 5; ++i)
-	{
-		D.push_front(rand() % 20);
-	}
-	D.print();
-	D.pop_front();
-	D.print();
-	D.pop_front();
-	D.print();
-	D.pop_front();
-	D.pop_front();
-	D.print();
-	D.pop_front();
-	D.print();
-	D.pop_front();
-	D.push_back(12);
-	D.push_front(11);
-	D.push_back(-7);
-	D.push_back(-91);
-	D.push_front(0);
-	D.print();
-	D.pop_back();
-	D.pop_front();
-	D.print();
-	D.pop_back();
-	D.print();
-	D.pop_back();
-	D.print();
-	D.pop_back();
-	D.print();
-	D.pop_back();
-	D.print();
+	//my::doubleList<int> D;
+	//for (int i = 0; i < 5; ++i)
+	//{
+	//	D.push_front(rand() % 20);
+	//}
+	//D.print();
+	//D.pop_front();
+	//D.print();
+	//D.pop_front();
+	//D.print();
+	//D.pop_front();
+	//D.pop_front();
+	//D.print();
+	//D.pop_front();
+	//D.print();
+	//D.pop_front();
+	//D.push_back(12);
+	//D.push_front(11);
+	//D.push_back(-7);
+	//D.push_back(-91);
+	//D.push_front(0);
+	//D.print();
+	//D.pop_back();
+	//D.pop_front();
+	//D.print();
+	//D.pop_back();
+	//D.print();
+	//D.pop_back();
+	//D.print();
+	//D.pop_back();
+	//D.print();
+	//D.pop_back();
+	//D.print();
+
+
+	//my::List<int> test1(11);
+	//test1.push_front(-7);
+	//test1.push_front(-66);
+	//test1.push_front(777);
+	//std::cout << "The test 1" << std::endl;
+	//test1.print();
+	//std::cout << std::endl << std::endl;
+
+	//my::List<int> test2 = test1;
+	//test2.push_front(444);
+	//std::cout << "The test 2" << std::endl;
+	//test2.print();
+	//std::cout << std::endl << std::endl;
+
+
+	//my::List<int> test3;
+	//test3 = test2;
+	//std::cout << "The test 3" << std::endl;
+	//test3.print();
+	//std::cout << std::endl << std::endl;
+
+	//return 77;
+
+	//std::vector<int> a = { 65,-8,25,21,99,-3,6,88,-9,-11,2,33 };
+
+	//for (std::vector<int>::iterator i = a.begin(); i < a.end(); ++i)
+	//{
+	//	std::cout << *i << ' ';
+	//}
+	//std::cout << '\n';
+
+	my::List<int> lst;
+
+	for (int i = 0; i < 20; ++i)
+		lst.push_front(rand() % 100);
+
+	lst.print();
+
+	for (my::List<int>::Iterator i = lst.begin(); i != lst.end(); ++i)
+		std::cout << (*i) << "  ";
+	std::cout << std::endl;
+
+
 }
+
