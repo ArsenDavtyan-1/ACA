@@ -9,12 +9,19 @@ int main()
 	A.fill();
 	A.print();
 
-	//std::cout << A.at(4, 5) << std::endl;
-	std::cout << A.at(1, 0) << std::endl;
-	//std::cout << A.at(44, 44) << std::endl;
-	std::cout << A.at(1, 3) << std::endl;
-	//std::cout << A.at(-1, 0) << std::endl;
-	std::cout << A.at(7, 2) << std::endl;
+	try {
+		//std::cout << A.at(4, 5) << std::endl;
+		std::cout << A.at(1, 0) << std::endl;
+		//std::cout << A.at(44, 44) << std::endl;
+		std::cout << A.at(1, 3) << std::endl;
+		//std::cout << A.at(-1, 0) << std::endl;
+		std::cout << A.at(7, 2) << std::endl;
+	}
+	catch (badAccess err)
+	{
+		std::cout << err.what() << std::endl;
+		std::terminate();
+	}
 }
 
 

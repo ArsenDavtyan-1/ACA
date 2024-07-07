@@ -182,21 +182,14 @@ Matrix::~Matrix()
 
 int& Matrix::at(int x, int y)
 {
-	try {
-		if(x < 0 || y < 0)
-			throw badAccess("Invalid indices, the index can not be < 0");
-		if (x >= row && y >= column)
-			throw badAccess("Out of raw and column size,error");
-		if (x >= row)
-			throw badAccess("Out of raw size, error");
-		if (y >= column)
-			throw badAccess("Out of column size, error");
-	}
-	catch (badAccess err)
-	{
-		std::cout << err.what() << std::endl;
-		std::terminate();
-	}
+	if(x < 0 || y < 0)
+		throw badAccess("Invalid indices, the index can not be < 0");
+	if (x >= row && y >= column)
+		throw badAccess("Out of raw and column size,error");
+	if (x >= row)
+		throw badAccess("Out of raw size, error");
+	if (y >= column)
+		throw badAccess("Out of column size, error");
 
 	return mat[x][y];
 	
